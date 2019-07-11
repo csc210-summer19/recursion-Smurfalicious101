@@ -2,6 +2,8 @@
  * ObstacleCourse: A type that represents an obstacle course from which to
  * escape. This does not find the shorted path. Because of this, we must always
  * assume there is only one exit.
+ * 
+ *  @author Rick Mercer and Tyler Heincy
  */
 public class ObstacleCourse {
 
@@ -9,6 +11,8 @@ public class ObstacleCourse {
   protected char[][] course;
   private int sRow;
   private int sCol;
+  private int nCols;
+  private int nRows;
   private int foundRow;
   private int foundCol;
   
@@ -23,6 +27,8 @@ public class ObstacleCourse {
     this.sRow = sRow;
     this.sCol = sCol;
     this.course = course;
+    nRows = course.length;
+    nCols = course[0].length;
     
     // The default values in case there is no exit.
     foundRow = -1;
@@ -71,12 +77,39 @@ public class ObstacleCourse {
    * col where the exit was found
    */
   private boolean findExit(int row, int col) {
-    // TODO: Complete this method
-    //
-    // Do not forget to set the instance variable foundRow and 
-    // foundCol in this method when the exit is found.
-    //
-    return !false;
-  }
+	  // TODO: Complete this method
+	  //
+	  // Do not forget to set the instance variable foundRow and 
+	  // foundCol in this method when the exit is found.
+	  // 
+	  boolean escaped = false; 
+	  if (row < nRows && row >=0 && col >=0 && col <nCols
+			  && course[row][col]==' '){
+		  course[row][col]= TRIED; 
+		  if (row == 0 || col ==0 || row == nRows-1 || col == nCols-1) {
+			  escaped = true; 
+			  foundRow = row;
+			  foundCol = col;
+		  }else   {
+			  escaped = findExit(row+1,col);
+
+			  if (!escaped) {
+				  escaped = findExit(row,col+1);
+			  }
+			  if (!escaped) {
+				  escaped = findExit(row-1,col);
+			  }
+			  if (!escaped) {
+				  escaped = findExit(row,col-1);
+			  }
+			    
+		  }
+		  if (escaped) {
+			  course[row][col] = PART_OF_PATH;
+		  }
+	  }
+	  return escaped;
+
+  } // end findTheExit 
 
 }

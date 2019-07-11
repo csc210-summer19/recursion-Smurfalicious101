@@ -9,7 +9,7 @@
  *   void removeAll(E)
  *   void duplicateAll(E) 
  * 
- * @author Rick Mercer and Your Name
+ * @author Rick Mercer and Tyler Heincy
  */
 public class LinkedList<E extends Comparable<E>> {
   // extends Comparable<E> means the type must be comparable to avoid CT errors
@@ -104,12 +104,15 @@ public class LinkedList<E extends Comparable<E>> {
   public E get(int index) {
     // This public method requires a private helper method with first 
     // as an argument. Here is an example with the helper immediately below
-    return get(first, 0, index);
+    return get(first, index);
   }
 
-  private E get(Node ref, int startIndex, int stopIndex) {
+  private E get(Node ref, int index) {
     // TODO: Complete this method using recursion, no loop allowed.
-    return null;
+	  if (index == 0) {
+		  return (E)ref.data;
+	  }
+	  return get(ref.next, index-1);
   }
  
   
@@ -118,12 +121,41 @@ public class LinkedList<E extends Comparable<E>> {
   public void removeAll(E el) {
     // This public method requires a call to a private helper method
     // with first as an argument. It must be recursive, no loop allowed.
+  removeAll(el,first,null);
+  }
+  private void removeAll(E el,Node ref,Node prev) {
+	  if (ref != null) {
+		  if (ref.data.equals(el)&& prev == null) {
+			  first = ref.next;
+			  removeAll(el,first,null);
+		  }else if (ref.data.equals(el)) {
+			  prev.next = ref.next;
+			  removeAll(el,ref.next,prev);
+		  }else {
+			  removeAll(el,ref.next,ref);
+		  }
+		  
+	  }
   }
 
   // Duplicate el next to each occurrence of el in this list.
   public void duplicateAll(E el) {
     // This public method requires a call to a private helper method
     // with first as an argument. It must be recursive, no loop allowed.
+	  duplicateAll(el,first);
+  }
+  private void duplicateAll(E el,Node ref) {
+	  Node next;
+	  if (ref != null) {
+		  if (ref.data.equals(el)) {
+			  next = ref.next;
+			  ref.next = new Node(el,ref.next);
+			  duplicateAll(el,next);
+			  n++;
+		  }else {
+			  duplicateAll(el,ref.next);
+		  }
+	  }
   }
 
 
